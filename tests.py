@@ -2,6 +2,12 @@ import pytest
 from fastapi.testclient import TestClient
 from main import app
 import logging
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+SECRET_TOKEN = os.getenv("SECRET_API_TOKEN")
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -12,7 +18,7 @@ client = TestClient(app)
 def auth_header():
     """Возвращает заголовок авторизации для тестирования."""
     return {
-        "Authorization": "Bearer secret-token"
+        "Authorization": f"Bearer {SECRET_TOKEN}"
     }
 
 def test_get_all_nodes():

@@ -2,6 +2,12 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from neo_queries import Queries
 from models_validate import NodeAndRelationships
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+SECRET_TOKEN = os.getenv("SECRET_API_TOKEN")
 
 # Инициализация приложения FastAPI
 app = FastAPI()
@@ -10,7 +16,7 @@ app = FastAPI()
 security = HTTPBearer()
 
 def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
-    if credentials.credentials != "secret-token":
+    if credentials.credentials != SECRET_TOKEN:
         raise HTTPException(status_code=401, detail="Invalid token")
     return credentials.credentials
 
